@@ -1,0 +1,21 @@
+#editormd h1,
+#editormd h2,
+#editormd h3,
+#editormd h4,
+#editormd h5,
+#editormd h6 {
+	margin: 0;
+    text-align: left;
+    background: none;
+    color: #000;
+
+}
+
+#editormd ul,
+#editormd ol {
+    margin-left: 1px!important;
+    padding-left: 1px!important;
+}
+#editormd {
+	z-index: 999;
+}

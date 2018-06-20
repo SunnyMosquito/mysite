@@ -1,0 +1,16 @@
+{% load staticfiles %}
+<div id="editormd">
+	<textarea style="display:none;" {{ final_attrs|safe }} >{{ value }}</textarea>
+</div>
+<script type="text/javascript">
+	var testEditor;
+
+	$(function () {
+		testEditor = editormd("editormd", {
+			width: "90%",
+			height: 640,
+			syncScrolling: "single",
+			path: "{% static 'post/lib/' %}",
+		});
+	});
+</script>

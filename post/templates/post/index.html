@@ -1,0 +1,144 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ settings.POST.SITE_TITLE }}</title>
+	<meta name="description" content="">
+	<meta name=”viewport” content=”width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no”/>
+	<link rel="stylesheet" type="text/css" href="{% static 'post/vendor/normalize.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'post/vendor/github-markdown.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'post/css/post.css' %}">
+	<script id="header-template" type="text/html">
+		<div class="wrap">
+			<div class="logo"><a href="#">{{ settings.POST.SITE_NAME }}</a></div>
+			<nav>
+				<ul>
+					<li><a href="#" class="active">主页</a></li>
+					<li>
+						<a href="#" class="category">分类</a>
+						<ul>
+							<% if (categorys != null) { %>
+								<% _.each(categorys.models,function(category){ %>
+								<li><a href="#category/<%- category.get('name') %>" class="<%- category.get('name') %>"><%- category.get('name') %></a></li>
+								<% }) %>
+							<% } %>
+						</ul>
+					</li>
+					<li><a href="#about" class="nav-about">关于我</a></li>
+					<li><a href="#contact" class="nav-contact">联系我</a></li>
+				</ul>
+			</nav>
+		</div>
+	</script>
+	<script id="home-template" type="text/html">
+		<div class="wrap home">
+			<% if (posts != null) { %>
+			<% _.each(posts.models,function(post){ %>
+			<section>
+				<a href="#post/<%- post.get('id') %>" class="post-title"><h1><%- post.get('title') %></h1></a>
+				<div class="post-info-wrap">
+					<span><%- post.get('pub_date') %></span>
+					<span class="cut-off">|</span>
+					<a href="#category/<%- post.get('category_display') %>"><%- post.get('category_display') %></a>
+				</div>
+				<p class="post-summary">
+					<%- post.get('description') %>
+				</p>
+				<a href="#post/<%- post.get('id') %>" class="button-round">阅读全文 →</a>
+			</section>
+			<% }) %>
+			<div class="button-wrap">
+				<% if (app.posts._previous) { %>
+					<button class="button prev-page" type="submit">← 上一页</button>
+				<% } %>
+				<% if (app.posts._next) { %>
+					<button class="button next-page" type="submit">下一页 →</button>
+				<% } %>
+			</div>
+			<% } else { %>
+				<h3>Loading...</h3>
+			<% } %>
+		</div>
+	</script>
+	<script id="about-template" type="text/html">
+		<div class="wrap about">
+			<img src="{% static 'post/image/tiankong.jpg' %}" width="100%">
+		</div>
+	</script>
+	<script id="contact-template" type="text/html">
+		<div class="wrap contact">
+			<h1>联系我...</h1>
+			<p>
+				快点联系我啊！
+			</p>
+			<form action="" method="post">
+				<label for="id_name">你的名字：</label>
+				<input id="id_name" type="text" name="name"
+					maxlength="30" placeholder="请输入你的名字" required />
+				<label for="id_email">你的邮箱：</label>
+				<input id="id_email" type="text" name="email"
+					maxlength="30" placeholder="请输入你的邮箱" required />
+				<label for="id_message">说点什么：</label>
+				<textarea id="id_message" type="text" name="message"
+					placeholder="请输入你想说的" required></textarea>
+				<button type="reset">取消</button>
+				<button type="submit">确定发送</button>
+			</form>
+		</div>
+	</script>
+	<script id="post-template" type="text/html">
+		<div class="wrap post">
+			<% if (post != null) { %>
+				<h1 class="post-title"><%- post.get('title') %></h1>
+				<div class="post-info-wrap">
+					<span><%- post.get('pub_date') %></span>
+					<span class="cut-off">|</span>
+					<a href="#category/<%- post.get('category_display') %>"><%- post.get('category_display') %></a>
+				</div>
+				<div class="post-content markdown-body">
+					<%= marked(post.get('content')) %>
+				</div>
+			<% } else { %>
+				<h3>Loading...</h3>
+			<% } %>
+		</div>
+	</script>
+	<script id="footer-template" type="text/html">
+		<div class="wrap">
+			<ul>
+				<li><a href="#" class="links">微博</a></li>
+				<li><a href="#" class="links">QQ</a></li>
+				<li><a href="#" class="links">微信</a></li>
+				<li><a href="#" class="links">github</a></li>
+			</ul>
+			<a href="http://www.miitbeian.gov.cn">
+				<p>互联网ICP备案：粤ICP备18061554号</p>
+			</a>
+		</div>
+	</script>
+</head>
+<body>
+
+	<div id="content"></div>
+
+	<script src="{% static 'post/vendor/marked.js' %}"></script>
+	<script src="{% static 'post/vendor/jquery-3.3.1.js' %}"></script>
+	<script src="{% static 'post/vendor/underscore.js' %}"></script>
+	<script src="{% static 'post/vendor/backbone.js' %}"></script>
+	<script id="config" type="text/json">
+		{
+			"models": {},
+			"collections": {},
+			"views": {},
+			"router": {},
+			"apiRoot": "{% url 'post:api-root' %}",
+			"apiLogin": "{% url 'api-token' %}"
+		}
+	</script>
+	<script src="{% static 'post/js/app.js' %}"></script>
+	<script src="{% static 'post/js/model.js' %}"></script>
+	<script src="{% static 'post/js/views.js' %}"></script>
+	<script src="{% static 'post/js/router.js' %}"></script>
+</body>
+</html>

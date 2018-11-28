@@ -12,13 +12,13 @@ try:
 except ImproperlyConfigured:
     DEBUG = False
 
-# minified = '.min' if not DEBUG else str()
 
 class MarkdownWidget(forms.Textarea):
 
     template_name = 'post/widget.html'
 
-    def render(self, name, value, attrs=None):
+    # 没有renderer会出错，render() got an unexpected keyword argument 'renderer'
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             value = ''
 
@@ -38,13 +38,11 @@ class MarkdownWidget(forms.Textarea):
     class Media:
         css = {
             'all': (
-                # 'post/vendor/github-markdown.css',
                 'post/css/editormd.min.css',
                 'post/css/admin-markdown.css',
             )
         }
         js = [
             'post/vendor/jquery-3.3.1.js',
-            # 'post/vendor/marked.js',
             'post/js/editormd.min.js',
         ]

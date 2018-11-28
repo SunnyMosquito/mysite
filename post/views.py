@@ -1,9 +1,9 @@
 from rest_framework import viewsets, authentication, permissions, filters
-from .models import Post, Category, Contact
-from .serializers import PostSerializer, CategorySerializer, ContactSerializer
+from .models import Post, Category, Message, Comment
+from .serializers import PostSerializer, CategorySerializer, MessageSerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from .filters import PostFilter, CategoryFilter, ContactFilter
+from .filters import PostFilter, CategoryFilter, MessageFilter
 from .permissions import AllowAnyPost
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -62,12 +62,21 @@ class CategoryViewSet(DefaultsMixin, viewsets.ModelViewSet):
     filter_class = CategoryFilter
 
 
-class ContactViewSet(DefaultsMixin, viewsets.ModelViewSet):
+class MessageViewSet(DefaultsMixin, viewsets.ModelViewSet):
     permission_classes = (
        AllowAnyPost, # 允许所有人post数据
     )
-    queryset = Contact.objects.order_by('pub_date')
-    serializer_class = ContactSerializer
-    filter_class = ContactFilter
-    search_fields = ('name',)
+    queryset = Message.objects.order_by('pub_date')
+    serializer_class = MessageSerializer
+    filter_class = MessageFilter
+    search_fields = ('nickname','content')
+    ordering_fields = ('pub_date',)
+
+class CommentViewSet(DefaultsMixin, viewsets.ModelViewSet):
+    permission_classes = (
+       AllowAnyPost, # 允许所有人post数据
+    )
+    queryset = Comment.objects.order_by('pub_date')
+    serializer_class = CommentSerializer
+    search_fields = ('nickname','content')
     ordering_fields = ('pub_date',)

@@ -7,7 +7,8 @@ from mysite import settings
 route = DefaultRouter()
 route.register(r'posts', views.PostViewSet)
 route.register(r'categorys', views.CategoryViewSet)
-route.register(r'contacts', views.ContactViewSet)
+route.register(r'messages', views.MessageViewSet)
+route.register(r'comments', views.CommentViewSet)
 
 app_name = 'post' # 加入了这个后reverse需要加入命名空间
 urlpatterns = [

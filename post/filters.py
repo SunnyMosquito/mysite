@@ -1,5 +1,5 @@
 import django_filters
-from .models import Post, Category, Contact
+from .models import Post, Category, Message
 
 class PostFilter(django_filters.FilterSet):
     class Meta:
@@ -21,11 +21,11 @@ class CategoryFilter(django_filters.FilterSet):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
 
-class ContactFilter(django_filters.FilterSet):
+class MessageFilter(django_filters.FilterSet):
 
     class Meta:
-        model = Contact
-        fields = ('name',)
+        model = Message
+        fields = ('nickname',)
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)

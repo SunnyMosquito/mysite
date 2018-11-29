@@ -1,5 +1,5 @@
 import django_filters
-from .models import Post, Category, Message
+from .models import Post, Category, Message, Comment
 
 class PostFilter(django_filters.FilterSet):
     class Meta:
@@ -11,6 +11,15 @@ class PostFilter(django_filters.FilterSet):
         # 过滤分类使用name
         self.filters['category'].extra.update(
             {'to_field_name': 'name'})
+
+class CommentFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Comment
+        fields = ('nickname','post')
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
 
 class CategoryFilter(django_filters.FilterSet):
 

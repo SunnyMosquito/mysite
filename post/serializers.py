@@ -22,6 +22,8 @@ class CategorySerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
 
     links = serializers.SerializerMethodField()
+    pub_date = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     class Meta:
         model = Message
@@ -39,6 +41,8 @@ class MessageSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
 
     links = serializers.SerializerMethodField()
+    pub_date = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     class Meta:
         model = Comment
@@ -58,13 +62,14 @@ class PostSerializer(serializers.ModelSerializer):
     links = serializers.SerializerMethodField()
 
     pub_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-
+    post_comment = CommentSerializer(
+        many=True, read_only=True)  # 要跟model里的关系名一样
     category_display = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ('id', 'title', 'description', 'content',
-                  'category', 'category_display', 'pub_date', 'links')
+                  'category', 'category_display', 'pub_date', 'post_comment', 'links')
 
     def get_links(self, obj):
         request = self.context['request']

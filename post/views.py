@@ -3,7 +3,7 @@ from .models import Post, Category, Message, Comment
 from .serializers import PostSerializer, CategorySerializer, MessageSerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from .filters import PostFilter, CategoryFilter, MessageFilter
+from .filters import PostFilter, CategoryFilter, MessageFilter, CommentFilter
 from .permissions import AllowAnyPost
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -78,5 +78,6 @@ class CommentViewSet(DefaultsMixin, viewsets.ModelViewSet):
     )
     queryset = Comment.objects.order_by('pub_date')
     serializer_class = CommentSerializer
+    filter_class = CommentFilter
     search_fields = ('nickname','content')
     ordering_fields = ('pub_date',)

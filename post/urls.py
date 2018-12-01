@@ -10,9 +10,10 @@ route.register(r'categorys', views.CategoryViewSet)
 route.register(r'messages', views.MessageViewSet)
 route.register(r'comments', views.CommentViewSet)
 
-app_name = 'post' # 加入了这个后reverse需要加入命名空间
+app_name = 'post'  # 加入了这个后reverse需要加入命名空间
 urlpatterns = [
     path('', TemplateView.as_view(template_name='post/index.html',
                                   extra_context={'settings': settings})),
-    path('post/api/', include(route.urls))
+    path('api/archive/', views.ArchiveView.as_view(), name="archive"),
+    path('api/', include(route.urls))
 ]

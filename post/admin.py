@@ -23,9 +23,9 @@ class MessageAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nickname', 'pub_date')
-    list_display_links = ('id', 'nickname', 'pub_date')
-    readonly_fields = ('total_likes', 'email', 'pub_date')
+    list_display = ('id', 'post', 'nickname', 'pub_date')
+    list_display_links = ('id', 'post', 'nickname', 'pub_date')
+    readonly_fields = ('total_likes', 'post', 'email', 'pub_date')
 
 
 class UploadImageAdmin(admin.ModelAdmin):

@@ -1,10 +1,19 @@
-from rest_framework import viewsets, authentication, permissions, filters
-from .models import Post, Category, Message, Comment
-from .serializers import PostSerializer, CategorySerializer, MessageSerializer, CommentSerializer
+import time
+import json
+from collections import defaultdict
+
+from django.http import JsonResponse
+from django.views.generic.base import View
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import authentication, filters, permissions, viewsets
 from rest_framework.pagination import PageNumberPagination
-from .filters import PostFilter, CategoryFilter, MessageFilter, CommentFilter
+
+from .filters import CategoryFilter, CommentFilter, MessageFilter, PostFilter
+from .models import Category, Comment, Message, Post
 from .permissions import AllowAnyPost
+from .serializers import (CategorySerializer, CommentSerializer,
+                          MessageSerializer, PostSerializer)
+
 
 class StandardResultsSetPagination(PageNumberPagination):
     # 每页显示多少个
@@ -16,13 +25,14 @@ class StandardResultsSetPagination(PageNumberPagination):
     # 获取页码数的参数
     page_query_param = 'page'
 
+
 class DefaultsMixin(object):
     authentication_class = (
         authentication.BasicAuthentication,
         authentication.TokenAuthentication,
     )
     permission_classes = (
-       permissions.IsAuthenticatedOrReadOnly,
+        permissions.IsAuthenticatedOrReadOnly,
     )
     pagination_class = StandardResultsSetPagination
     filter_backends = (
@@ -30,7 +40,8 @@ class DefaultsMixin(object):
         filters.SearchFilter,
         filters.OrderingFilter,
     )
-			
+
+
 class PostViewSet(DefaultsMixin, viewsets.ModelViewSet):
     # 公开的文章
     queryset = Post.objects.filter(post_status=1).order_by('-pub_date')
@@ -54,9 +65,9 @@ class PostViewSet(DefaultsMixin, viewsets.ModelViewSet):
 
 
 class CategoryViewSet(DefaultsMixin, viewsets.ModelViewSet):
-    lookup_field = 'name' # 使用name不使用id查询
+    lookup_field = 'name'  # 使用name不使用id查询
     lookup_url_kwarg = 'name'  # 使用name不使用id查询
-    queryset = Category.objects.order_by('-index') # 分类按index有大到小排序
+    queryset = Category.objects.order_by('-index')  # 分类按index有大到小排序
     serializer_class = CategorySerializer
     pagination_class = None
     filter_class = CategoryFilter
@@ -64,20 +75,32 @@ class CategoryViewSet(DefaultsMixin, viewsets.ModelViewSet):
 
 class MessageViewSet(DefaultsMixin, viewsets.ModelViewSet):
     permission_classes = (
-       AllowAnyPost, # 允许所有人post数据
+        AllowAnyPost,  # 允许所有人post数据
     )
     queryset = Message.objects.order_by('pub_date')
     serializer_class = MessageSerializer
     filter_class = MessageFilter
-    search_fields = ('nickname','content')
+    search_fields = ('nickname', 'content')
     ordering_fields = ('pub_date',)
+
 
 class CommentViewSet(DefaultsMixin, viewsets.ModelViewSet):
     permission_classes = (
-       AllowAnyPost, # 允许所有人post数据
+        AllowAnyPost,  # 允许所有人post数据
     )
     queryset = Comment.objects.order_by('pub_date')
     serializer_class = CommentSerializer
     filter_class = CommentFilter
-    search_fields = ('nickname','content')
+    search_fields = ('nickname', 'content')
     ordering_fields = ('pub_date',)
+
+
+class ArchiveView(View):
+    def get(self, request):
+        archiveSet = Post.objects.filter(post_status=1).order_by('-pub_date')
+        data = defaultdict(list)
+        for archive in archiveSet:
+            if archive.pub_date:
+                data[archive.pub_date.year].append(
+                    {"id": archive.id, "title": archive.title, "pub_date": archive.pub_date.strftime("%Y-%m-%d %H:%M:%S")})
+        return JsonResponse(data, safe=False)

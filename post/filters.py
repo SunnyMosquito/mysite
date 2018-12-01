@@ -1,5 +1,7 @@
 import django_filters
-from .models import Post, Category, Message, Comment
+
+from .models import Category, Comment, Message, Post
+
 
 class PostFilter(django_filters.FilterSet):
     class Meta:

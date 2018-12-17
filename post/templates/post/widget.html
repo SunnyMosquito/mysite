@@ -6,10 +6,11 @@
 <script type="text/javascript">
   var testEditor;
 
-  $(function() {
+  $(function () {
     testEditor = editormd("editormd", {
       width: "90%",
       height: 640,
+      watch: false, // 关闭实时预览
       syncScrolling: "single",
       path: "{% static 'post/lib/' %}"
     });

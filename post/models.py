@@ -73,7 +73,7 @@ class Comment(models.Model):
     total_likes = models.PositiveIntegerField(db_index=True, default=0)
     post = models.ForeignKey(
         Post, related_name='post_comment', on_delete=models.CASCADE, verbose_name='文章')
-    
+
     class Meta:
         verbose_name = '评论表'
         verbose_name_plural = verbose_name

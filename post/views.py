@@ -1,5 +1,5 @@
-import time
 import json
+import time
 from collections import defaultdict
 
 from django.http import JsonResponse
@@ -17,11 +17,11 @@ from .serializers import (CategorySerializer, CommentSerializer,
 
 class StandardResultsSetPagination(PageNumberPagination):
     # 每页显示多少个
-    page_size = 5
+    page_size = 8
     # 默认每页显示8个，可以通过传入pager1/?page=2&size=4,改变默认每页显示的个数
     page_size_query_param = 'size'
     # 每页最多不超过10
-    max_page_size = 10
+    max_page_size = 100
     # 获取页码数的参数
     page_query_param = 'page'
 
@@ -103,4 +103,4 @@ class ArchiveView(View):
             if archive.pub_date:
                 data[archive.pub_date.year].append(
                     {"id": archive.id, "title": archive.title, "pub_date": archive.pub_date.strftime("%Y-%m-%d %H:%M:%S")})
-        return JsonResponse(data, safe=False)
+        return JsonResponse(data, safe=True)

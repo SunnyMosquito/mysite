@@ -1,3 +1,4 @@
+from .local_settings import *
 """
 Django settings for mysite project.
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sslserver',  # 本地ssl测试
     'rest_framework',
     'rest_framework.authtoken',
     'post',
@@ -72,21 +74,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysite',
-        'USER': 'root',
-        'PASSWORD': 'nopassword',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
 
 
 # Password validation
@@ -127,7 +114,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -136,11 +123,3 @@ POST = {
     'SITE_TITLE': '蚊子的个人博客',
     'SITE_NAME': '蚊子的个人博客',
 }
-
-# email配置
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.qq.com' 
-EMAIL_PORT = 465
-EMAIL_HOST_USER = '1582452043@qq.com' # 帐号
-EMAIL_HOST_PASSWORD = 'zxfzjanmhmlagheg'  # 密码
-EMAIL_FROM = EMAIL_HOST_USER
